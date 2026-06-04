@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="el">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+<title>Private invite</title>
+<style>
+:root{--hot:#ff2f7d;--gold:#f3c77b;--text:#fff4f8;--muted:rgba(255,228,238,.72)}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{margin:0;min-height:100svh;font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text",Segoe UI,sans-serif;color:var(--text);background:radial-gradient(circle at 18% 8%,rgba(255,47,125,.30),transparent 24%),radial-gradient(circle at 85% 78%,rgba(243,199,123,.18),transparent 26%),linear-gradient(145deg,#050306,#150812 48%,#050306);overflow-x:hidden}
+.safe{min-height:100svh;display:grid;place-items:center;padding:max(22px,env(safe-area-inset-top)) 16px max(26px,env(safe-area-inset-bottom))}
+.card{width:min(455px,100%);border-radius:34px;background:linear-gradient(180deg,rgba(255,255,255,.10),rgba(255,255,255,.04)),rgba(18,12,17,.90);border:1px solid rgba(255,255,255,.16);box-shadow:0 28px 80px rgba(0,0,0,.55);overflow:hidden;backdrop-filter:blur(18px);position:relative}
+.card:before{content:"";position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,255,255,.16),transparent 28%,rgba(255,47,125,.09));pointer-events:none}
+.inner{position:relative;z-index:1}
+.top{padding:24px 22px 0;display:flex;justify-content:space-between;gap:12px;align-items:center}
+.pill{display:inline-flex;align-items:center;gap:8px;padding:8px 12px;border-radius:999px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.14);color:var(--muted);font-size:12px;font-weight:800;letter-spacing:.08em;text-transform:uppercase}
+.pulse{width:8px;height:8px;border-radius:999px;background:var(--hot);box-shadow:0 0 0 5px rgba(255,47,125,.12),0 0 22px rgba(255,47,125,.72)}
+.mark{font-size:12px;color:rgba(255,228,238,.6);font-weight:800;letter-spacing:.10em;text-transform:uppercase}
+.hero{padding:18px 22px 20px;border-bottom:1px solid rgba(255,255,255,.14)}
+h1{margin:0 0 12px;font-family:Georgia,"Times New Roman",serif;font-size:clamp(38px,10vw,54px);line-height:.92;letter-spacing:-.055em}
+.subtitle{margin:0;color:var(--muted);font-size:16px;line-height:1.52;max-width:34ch}
+.note{margin-top:18px;padding:17px;border-radius:22px;background:linear-gradient(180deg,rgba(255,255,255,.09),rgba(255,47,125,.055));border:1px solid rgba(255,255,255,.14);box-shadow:inset 0 1px 0 rgba(255,255,255,.10)}
+.label{display:block;margin-bottom:9px;color:rgba(243,199,123,.85);font-size:11px;font-weight:900;letter-spacing:.12em;text-transform:uppercase}.label-plus{margin:-2px 0 12px;padding:10px 12px;border-radius:14px;background:linear-gradient(135deg,rgba(243,199,123,.16),rgba(255,47,125,.08));border:1px solid rgba(243,199,123,.22);color:rgba(255,244,248,.86);font-size:13px;line-height:1.35;font-weight:750}.label-plus b{color:rgba(243,199,123,.95);font-weight:900}.micro-row{display:flex;gap:8px;margin:12px 0 0}.micro-row span{flex:1;padding:9px 8px;border-radius:13px;background:rgba(243,199,123,.10);border:1px solid rgba(243,199,123,.14);color:rgba(255,228,238,.78);font-size:11px;font-weight:850;text-align:center;letter-spacing:.04em;text-transform:uppercase}
+.type{min-height:78px;font-size:17px;line-height:1.48;color:rgba(255,244,248,.92);font-weight:650}
+.note-extra{margin:14px 0 0;color:rgba(255,228,238,.72);font-size:14px;line-height:1.45}
+.mini-lines{display:grid;grid-template-columns:1fr;gap:8px;margin-top:14px}
+.mini-lines span{padding:10px 12px;border-radius:14px;background:rgba(255,255,255,.075);border:1px solid rgba(255,255,255,.12);color:rgba(255,228,238,.78);font-size:12px;font-weight:900;letter-spacing:.06em;text-transform:uppercase}
+.section{padding:18px 22px 0}
+.section h2{margin:0 0 8px;font-size:19px}
+.section p{margin:0;color:var(--muted);font-size:14px;line-height:1.48}
+.options{padding:14px 22px 0;display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.chip{border:1px solid rgba(255,255,255,.13);background:rgba(255,255,255,.075);color:var(--text);border-radius:19px;padding:14px 12px;text-align:left;font-size:15px;font-weight:850;cursor:pointer;box-shadow:0 14px 28px rgba(0,0,0,.18);transition:.16s}
+.chip:active{transform:scale(.97)}
+.chip small{display:block;margin-top:4px;color:rgba(255,228,238,.62);font-size:12px;line-height:1.25;font-weight:650}
+.chip.selected{background:linear-gradient(135deg,rgba(255,47,125,.30),rgba(243,199,123,.12));border-color:rgba(255,47,125,.55);box-shadow:0 16px 34px rgba(255,47,125,.18)}
+.chip.secret{grid-column:1/-1;background:linear-gradient(135deg,rgba(255,47,125,.90),rgba(90,18,49,.94));border-color:rgba(255,255,255,.20)}
+.chip.secret.selected{background:linear-gradient(135deg,#ff2f7d,#5a1231 55%,#211018);box-shadow:0 20px 42px rgba(255,47,125,.28);border-color:rgba(243,199,123,.58)}
+.tease{margin:14px 22px 0;padding:14px 16px;border-radius:20px;color:var(--muted);background:rgba(255,47,125,.10);border:1px dashed rgba(255,47,125,.35);font-size:14px;line-height:1.45}
+.tease strong{color:#fff}
+.question{margin:18px 22px 0;padding:18px;border-radius:24px;background:rgba(255,255,255,.075);border:1px solid rgba(255,255,255,.13)}
+.question p{margin:0;color:var(--muted);font-size:15px;line-height:1.48}
+.buttons{display:flex;gap:10px;margin-top:16px;min-height:58px;position:relative}
+.btn{border:0;border-radius:19px;padding:16px 12px;font-size:16px;font-weight:900;cursor:pointer;transition:.16s;flex:1;box-shadow:0 16px 32px rgba(0,0,0,.26);touch-action:manipulation}
+.yes{color:#fff;background:linear-gradient(135deg,var(--hot),#b61f5b)}
+.maybe{background:rgba(255,255,255,.10);color:rgba(255,244,248,.92);position:relative;border:1px solid rgba(255,255,255,.13)}
+.maybe.escaping{opacity:0;transform:scale(.55) rotate(-8deg);pointer-events:none}
+.maybe.floating{position:fixed;min-width:122px;width:max-content;z-index:999;flex:0 0 auto}
+.result{display:none;margin:18px 22px 22px;padding:18px;border-radius:24px;background:linear-gradient(180deg,rgba(255,255,255,.12),rgba(255,255,255,.06));border:1px solid rgba(255,255,255,.15);animation:pop .38s ease both}
+.result.show{display:block}
+.result h3{margin:0 0 8px;font-family:Georgia,"Times New Roman",serif;font-size:28px}
+.result p{margin:0 0 14px;color:var(--muted);line-height:1.5;font-size:15px}
+.share{width:100%;border:0;border-radius:17px;padding:14px 12px;background:#fff4f8;color:#241018;font-weight:900;font-size:15px}
+.footer{padding:0 22px 22px;text-align:center;color:rgba(255,228,238,.48);font-size:12px}
+.confetti{position:fixed;width:9px;height:14px;top:-20px;border-radius:4px;pointer-events:none;animation:fall 1.9s ease-in forwards;z-index:20}
+@keyframes pop{from{transform:translateY(12px) scale(.97);opacity:0}to{transform:none;opacity:1}}
+@keyframes fall{to{transform:translateY(110svh) rotate(560deg);opacity:0}}
+@media(max-width:380px){.options{grid-template-columns:1fr}.buttons{flex-direction:column}.card{border-radius:28px}}
+</style>
+</head>
+<body>
+<main class="safe"><section class="card"><div class="inner">
+<div class="top"><div class="pill"><span class="pulse"></span> private invite</div><div class="mark">after dark</div></div>
+<div class="hero"><h1>Έχεις σχέδια για το ΣΚ;</h1><p class="subtitle">Γιατί εγώ έχω ένα μικρό σχέδιο για εμάς. Κάτι όμορφο, λίγο βραδινό και ίσως λίγο πιο επικίνδυνα γλυκό.</p><div class="note">
+<span class="label">μόνο για σένα</span>
+<div class="label-plus"><b>Πρόσκληση:</b> να ντυθούμε όμορφα, να χαθούμε λίγο στη βραδιά και να αφήσουμε το υπόλοιπο να γίνει από μόνο του.</div>
+<div class="type" id="typed"></div>
+<div class="micro-row"><span>eyes only</span><span>no rush</span><span>just us</span></div>
+<p class="note-extra">Δεν είναι απλά “πάμε μια βόλτα”. Είναι ένα μικρό βράδυ φτιαγμένο για εμάς: βλέμματα, πειράγματα, λίγο κρασί αν θες, και μια συνέχεια που αφήνω να την διαλέξεις εσύ.</p>
+<div class="mini-lines">
+<span>private plan</span>
+<span>after dark mood</span>
+<span>μόνο οι δυο μας</span>
+</div>
+</div></div>
+<div class="section"><h2>Διάλεξε τι σου κάνει κλικ</h2><p>Μία μέρα, όσες επιλογές θέλεις, και ένα μικρό κουμπί που δεν είναι τόσο αθώο όσο φαίνεται.</p></div>
+<div class="options">
+<button class="chip" data-kind="day" data-value="Σάββατο">Σάββατο ✨<small>για πιο βραδινό mood</small></button>
+<button class="chip" data-kind="day" data-value="Κυριακή">Κυριακή 🌙<small>πιο χαλαρά, πιο κοντά</small></button>
+<button class="chip" data-kind="plan" data-value="φαγητό">Φαγητό 🍝<small>να ξεκινήσει σωστά</small></button>
+<button class="chip" data-kind="plan" data-value="ποτό">Ποτό 🍸<small>να χαλαρώσουμε λίγο</small></button>
+<button class="chip" data-kind="plan" data-value="γλυκό">Γλυκό 🍰<small>κάτι γλυκό πριν από κάτι άλλο</small></button>
+<button class="chip" data-kind="plan" data-value="βόλτα">Βόλτα 🌆<small>λίγο περπάτημα, πολλή χημεία</small></button>
+<button class="chip secret" data-kind="plan" data-value="secret" data-locked-text="🔒 Μυστική επιλογή — πάτα μόνο αν θες να μάθεις" data-open-text="Καλή επιλογή... μετά την έξοδο μόνο οι δυο μας 😏">🔒 Μυστική επιλογή — πάτα μόνο αν θες να μάθεις<small>δεν θα το γράψω πιο ξεκάθαρα εδώ 😏</small></button>
+</div>
+<div class="tease"><strong>Μικρή προειδοποίηση:</strong> η μυστική επιλογή είναι για μετά την έξοδο. Όχι απαραίτητα για να πάμε σπίτι νωρίς... μάλλον το αντίθετο 😏</div>
+<div class="question"><p>Διάλεξε μέρα και όσες επιλογές θες. Μπορείς να πατήσεις παραπάνω από μία. Μετά πάτα το κουμπί που ξέρεις ότι θες να πατήσεις.</p><div class="buttons"><button class="btn yes" id="yesBtn">Ναι, το θέλω 💋</button><button class="btn maybe" id="noBtn">Χμμ…</button></div></div>
+<div class="result" id="result"><h3>Το ήξερα.</h3><p id="finalText">Μόλις το έκανες πιο ενδιαφέρον.</p><button class="share" id="shareBtn">Άνοιγμα SMS ξανά</button></div>
+<div class="footer">Made for one person only. And she knows who she is.</div>
+</div></section></main>
+<script>
+const MY_PHONE_NUMBER='+306948281935';
+const typed=document.getElementById('typed');const text='Αυτό δεν είναι απλά ένα ραντεβού. Είναι μια μικρή αφορμή να σε δω, να σε πειράξω λίγο, να σε κάνω να χαμογελάσεις και να περάσουμε ένα βράδυ που ίσως δεν θέλουμε να τελειώσει γρήγορα.';let i=0;function typeWriter(){if(i<=text.length){typed.textContent=text.slice(0,i);i++;setTimeout(typeWriter,24)}}typeWriter();
+const chips=document.querySelectorAll('.chip');let selectedDay='';const selectedPlans=new Set();chips.forEach(chip=>{chip.addEventListener('click',()=>{const kind=chip.dataset.kind,value=chip.dataset.value;if(kind==='day'){document.querySelectorAll('.chip[data-kind="day"]').forEach(c=>c.classList.remove('selected'));selectedDay=selectedDay===value?'':value;if(selectedDay)chip.classList.add('selected');return}chip.classList.toggle('selected');selectedPlans.has(value)?selectedPlans.delete(value):selectedPlans.add(value);if(value==='secret'){const label=selectedPlans.has('secret')?chip.dataset.openText:chip.dataset.lockedText;chip.innerHTML=`${label}<small>δεν θα το γράψω πιο ξεκάθαρα εδώ 😏</small>`}})});
+const yesBtn=document.getElementById('yesBtn'),noBtn=document.getElementById('noBtn'),result=document.getElementById('result'),finalText=document.getElementById('finalText'),shareBtn=document.getElementById('shareBtn');const teasing=['Μη μου κάνεις τη δύσκολη 😏','Το ξέρεις ότι θες ναι','Ξαναδοκίμασε... αλλά αλλού','Όχι τόσο εύκολα 🙈','Πάτα το σωστό κουμπί 💋'];let teaseIndex=0;function randomSpotForNoButton(){const p=16,r=noBtn.getBoundingClientRect(),ml=Math.max(p,innerWidth-r.width-p),mt=Math.max(p,innerHeight-r.height-p);return{left:p+Math.random()*(ml-p),top:p+Math.random()*(mt-p)}}function escapeNoButton(e){e.preventDefault();e.stopPropagation();noBtn.textContent=teasing[teaseIndex++%teasing.length];noBtn.classList.add('escaping');yesBtn.style.filter='brightness(1.08)';setTimeout(()=>{noBtn.classList.add('floating');const s=randomSpotForNoButton();noBtn.style.left=s.left+'px';noBtn.style.top=s.top+'px';noBtn.style.transform='scale(1) rotate(0deg)';noBtn.classList.remove('escaping')},160);setTimeout(()=>yesBtn.style.filter='none',460)}['pointerdown','mouseenter'].forEach(a=>noBtn.addEventListener(a,escapeNoButton));
+function joinGreek(items){if(items.length===0)return'';if(items.length===1)return items[0];if(items.length===2)return`${items[0]} και ${items[1]}`;return`${items.slice(0,-1).join(', ')} και ${items[items.length-1]}`}function buildMessage(){const dayPhrase=selectedDay==='Σάββατο'?'το Σάββατο':selectedDay==='Κυριακή'?'την Κυριακή':'αυτό το ΣΚ';const wantsFood=selectedPlans.has('φαγητό'),wantsDrink=selectedPlans.has('ποτό'),wantsSweet=selectedPlans.has('γλυκό'),wantsWalk=selectedPlans.has('βόλτα'),wantsSecret=selectedPlans.has('secret');const main=[];if(wantsFood)main.push('φαγητό');if(wantsDrink)main.push('ποτό');if(wantsSweet)main.push('γλυκό');let base='';if(main.length&&wantsWalk)base=`Ναι, θέλω να πάμε ${dayPhrase} για ${joinGreek(main)} και μετά μια βόλτα, οι δυο μας`;else if(main.length)base=`Ναι, θέλω να πάμε ${dayPhrase} για ${joinGreek(main)}, να κάτσουμε μαζί και να περάσουμε όμορφα`;else if(wantsWalk)base=`Ναι, θέλω να πάμε ${dayPhrase} μια βόλτα και να τα πούμε από κοντά, οι δυο μας`;else if(selectedDay)base=`Ναι, θέλω να πάμε ραντεβού ${dayPhrase}, όπου διαλέξεις εσύ`;else base='Ναι, θέλω να πάμε ραντεβού αυτό το ΣΚ, όπου διαλέξεις εσύ';if(wantsSecret)return`${base}. Και μετά την έξοδο... θέλω λίγη ακόμα ώρα μόνο οι δυο μας, χωρίς πολλά λόγια 😏`;return`${base} 💋`}
+function confetti(){const colors=['#ff2f7d','#f3c77b','#ffffff','#8a214c','#2a0e1e'];for(let c=0;c<80;c++){const piece=document.createElement('span');piece.className='confetti';piece.style.left=Math.random()*100+'vw';piece.style.background=colors[Math.floor(Math.random()*colors.length)];piece.style.animationDelay=Math.random()*.35+'s';piece.style.transform=`rotate(${Math.random()*180}deg)`;document.body.appendChild(piece);setTimeout(()=>piece.remove(),2300)}}function openReadySms(message){const phone=MY_PHONE_NUMBER.trim().replace(/\s+/g,'');const body=encodeURIComponent(message);location.href=`sms:${phone}&body=${body}`}yesBtn.addEventListener('click',()=>{const msg=buildMessage();finalText.textContent=msg+' Θα ανοίξει έτοιμο μήνυμα για να το στείλεις στον Λάμπρο.';result.classList.add('show');confetti();result.scrollIntoView({behavior:'smooth',block:'nearest'});setTimeout(()=>openReadySms(msg),700)});shareBtn.addEventListener('click',()=>openReadySms(buildMessage()));
+</script>
+</body>
+</html>
