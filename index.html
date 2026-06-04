@@ -1,0 +1,483 @@
+<!doctype html>
+<html lang="el">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <title>Ένα μικρό ραντεβού; 💌</title>
+  <style>
+    :root {
+      --bg1: #ffdde1;
+      --bg2: #ee9ca7;
+      --card: rgba(255,255,255,.86);
+      --text: #3a2130;
+      --muted: #7a5365;
+      --accent: #ff4f87;
+      --accent2: #ff9a8b;
+      --green: #31c48d;
+      --shadow: 0 24px 60px rgba(98, 28, 57, .25);
+    }
+
+    * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+    body {
+      margin: 0;
+      min-height: 100svh;
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", sans-serif;
+      color: var(--text);
+      background: radial-gradient(circle at top left, #fff7ad 0 12%, transparent 32%),
+                  radial-gradient(circle at bottom right, #b8f7ff 0 8%, transparent 30%),
+                  linear-gradient(135deg, var(--bg1), var(--bg2));
+      overflow-x: hidden;
+    }
+
+    .safe {
+      min-height: 100svh;
+      padding: max(22px, env(safe-area-inset-top)) 18px max(28px, env(safe-area-inset-bottom));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .hearts {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      overflow: hidden;
+      z-index: 0;
+    }
+
+    .heart {
+      position: absolute;
+      bottom: -40px;
+      font-size: 18px;
+      opacity: .55;
+      animation: floatUp linear infinite;
+      filter: drop-shadow(0 8px 12px rgba(0,0,0,.12));
+    }
+
+    @keyframes floatUp {
+      0% { transform: translateY(0) rotate(0deg) scale(.9); opacity: 0; }
+      12% { opacity: .55; }
+      100% { transform: translateY(-115svh) rotate(35deg) scale(1.25); opacity: 0; }
+    }
+
+    .card {
+      width: min(430px, 100%);
+      position: relative;
+      z-index: 1;
+      background: var(--card);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      border: 1px solid rgba(255,255,255,.65);
+      border-radius: 34px;
+      box-shadow: var(--shadow);
+      padding: 26px 20px 20px;
+      overflow: hidden;
+    }
+
+    .card::before {
+      content: "";
+      position: absolute;
+      width: 190px;
+      height: 190px;
+      right: -80px;
+      top: -80px;
+      background: radial-gradient(circle, rgba(255,79,135,.34), transparent 68%);
+      border-radius: 50%;
+      z-index: -1;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.75);
+      font-size: 13px;
+      color: var(--muted);
+      margin-bottom: 14px;
+    }
+
+    h1 {
+      font-size: clamp(31px, 8vw, 44px);
+      line-height: .98;
+      letter-spacing: -1.2px;
+      margin: 0 0 12px;
+    }
+
+    .subtitle {
+      color: var(--muted);
+      font-size: 17px;
+      line-height: 1.45;
+      margin: 0 0 20px;
+    }
+
+    .type {
+      min-height: 52px;
+      font-weight: 700;
+      font-size: 20px;
+      line-height: 1.25;
+      margin: 12px 0 18px;
+    }
+
+    .options {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin: 14px 0 18px;
+    }
+
+    .chip {
+      border: 0;
+      border-radius: 18px;
+      padding: 14px 10px;
+      background: rgba(255,255,255,.78);
+      box-shadow: 0 10px 24px rgba(91, 38, 62, .11);
+      color: var(--text);
+      font-weight: 700;
+      font-size: 15px;
+      cursor: pointer;
+      transition: transform .16s ease, background .16s ease, box-shadow .16s ease;
+    }
+
+    .chip:active { transform: scale(.96); }
+    .chip.selected {
+      background: linear-gradient(135deg, #fff, #ffe4ed);
+      outline: 2px solid rgba(255,79,135,.55);
+      box-shadow: 0 16px 30px rgba(255,79,135,.2);
+    }
+
+    .question {
+      margin-top: 16px;
+      padding: 16px;
+      border-radius: 24px;
+      background: linear-gradient(135deg, rgba(255,255,255,.75), rgba(255,244,248,.8));
+      border: 1px solid rgba(255,255,255,.65);
+    }
+
+    .question p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 15px;
+      line-height: 1.38;
+    }
+
+    .buttons {
+      display: flex;
+      gap: 10px;
+      margin-top: 14px;
+      position: relative;
+      min-height: 56px;
+    }
+
+    .btn {
+      flex: 1;
+      border: 0;
+      border-radius: 18px;
+      padding: 15px 12px;
+      font-size: 17px;
+      font-weight: 800;
+      cursor: pointer;
+      box-shadow: 0 12px 24px rgba(91, 38, 62, .16);
+      transition: transform .16s ease, filter .16s ease, left .2s ease, top .2s ease;
+      touch-action: manipulation;
+    }
+
+    .btn:active { transform: scale(.96); }
+
+    .yes {
+      color: white;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+    }
+
+    .maybe {
+      color: var(--text);
+      background: rgba(255,255,255,.88);
+      position: relative;
+    }
+
+    .maybe.escaping {
+      opacity: 0;
+      transform: scale(.55) rotate(-8deg);
+      pointer-events: none;
+    }
+
+    .maybe.floating {
+      position: fixed;
+      flex: 0 0 auto;
+      width: max-content;
+      min-width: 118px;
+      z-index: 50;
+    }
+
+    .result {
+      display: none;
+      margin-top: 16px;
+      padding: 18px;
+      border-radius: 24px;
+      background: rgba(255,255,255,.82);
+      border: 1px solid rgba(255,255,255,.75);
+      animation: pop .38s ease both;
+    }
+
+    .result.show { display: block; }
+
+    @keyframes pop {
+      from { transform: translateY(12px) scale(.97); opacity: 0; }
+      to { transform: translateY(0) scale(1); opacity: 1; }
+    }
+
+    .result h2 {
+      margin: 0 0 8px;
+      font-size: 25px;
+      letter-spacing: -.4px;
+    }
+
+    .result p {
+      margin: 0 0 12px;
+      color: var(--muted);
+      line-height: 1.42;
+    }
+
+    .share {
+      width: 100%;
+      border: 0;
+      border-radius: 18px;
+      padding: 14px 12px;
+      background: #1f2937;
+      color: #fff;
+      font-weight: 800;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    .tiny {
+      text-align: center;
+      margin: 15px 0 0;
+      font-size: 12px;
+      color: rgba(58,33,48,.58);
+    }
+
+    .confetti {
+      position: fixed;
+      width: 9px;
+      height: 14px;
+      top: -20px;
+      border-radius: 4px;
+      pointer-events: none;
+      animation: fall 1.9s ease-in forwards;
+      z-index: 20;
+    }
+
+    @keyframes fall {
+      to { transform: translateY(110svh) rotate(560deg); opacity: 0; }
+    }
+
+    .pulse {
+      animation: pulse 1.4s ease-in-out infinite;
+      display: inline-block;
+    }
+
+    @keyframes pulse {
+      0%,100% { transform: scale(1); }
+      50% { transform: scale(1.12); }
+    }
+
+    @media (max-width: 360px) {
+      .card { padding: 22px 16px 18px; border-radius: 28px; }
+      .options { grid-template-columns: 1fr; }
+      .buttons { flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+  <!-- ΑΛΛΑΞΕ ΕΔΩ αν θέλεις πιο προσωπικό κείμενο:
+       1) Βάλε το όνομά της στον τίτλο μέσα στο h1.
+       2) Άλλαξε τα μέρη/δραστηριότητες στα κουμπιά .chip.
+       3) Βάλε το κινητό σου στη μεταβλητή MY_PHONE_NUMBER μέσα στο script.
+       Σημαντικό: Στο iPhone ανοίγει έτοιμο SMS, αλλά η ίδια πρέπει να πατήσει Αποστολή.
+  -->
+  <div class="hearts" aria-hidden="true" id="hearts"></div>
+
+  <main class="safe">
+    <section class="card">
+      <div class="badge"><span class="pulse">💌</span> Μυστική πρόσκληση για το ΣΚ</div>
+
+      <h1>Θα βγούμε ραντεβού αυτό το ΣΚ;</h1>
+      <p class="subtitle">Έφτιαξα αυτή τη μικρή σελίδα μόνο για σένα, γιατί ένα απλό μήνυμα δεν μου φάνηκε αρκετό.</p>
+
+      <div class="type" id="typed"></div>
+
+      <div class="options" aria-label="Επιλογές ραντεβού">
+        <button class="chip" data-value="Σάββατο">Σάββατο ✨</button>
+        <button class="chip" data-value="Κυριακή">Κυριακή 🌙</button>
+        <button class="chip" data-value="φαγητό / γλυκό">Φαγητό / γλυκό 🍰</button>
+        <button class="chip" data-value="βόλτα και κουβέντα">Βόλτα & κουβέντα 🌆</button>
+      </div>
+
+      <div class="question">
+        <p>Διάλεξε τι σου ακούγεται πιο ωραίο και μετά πάτα τη σωστή απάντηση. Υπάρχει μόνο μία σωστή απάντηση, αλλά το παίζω δημοκρατικός.</p>
+        <div class="buttons">
+          <button class="btn yes" id="yesBtn">Ναι, πάμε 💖</button>
+          <button class="btn maybe" id="noBtn">Χμμ… 🙈</button>
+        </div>
+      </div>
+
+      <div class="result" id="result">
+        <h2>Τέλεια. Το κλείσαμε. 🥹</h2>
+        <p id="finalText">Ετοιμάζω χαμόγελο, καλή διάθεση και μια μικρή έκπληξη.</p>
+        <button class="share" id="shareBtn">Άνοιγμα SMS ξανά 💬</button>
+      </div>
+
+      <p class="tiny">Made with love, λίγο άγχος και πολλή καλή πρόθεση.</p>
+    </section>
+  </main>
+
+  <script>
+    // ΒΑΛΕ ΕΔΩ ΤΟ ΚΙΝΗΤΟ ΣΟΥ, π.χ. +3069XXXXXXXX
+    // Άφησέ το με +30 μπροστά για να δουλεύει σωστά και από παντού.
+    const MY_PHONE_NUMBER = '+306948281935';
+
+    const typed = document.getElementById('typed');
+    const text = 'Θέλω απλά να περάσουμε λίγο όμορφο χρόνο μαζί. Εσύ, εγώ και ένα μικρό σχέδιο για το Σαββατοκύριακο.';
+    let i = 0;
+
+    function typeWriter() {
+      if (i <= text.length) {
+        typed.textContent = text.slice(0, i);
+        i++;
+        setTimeout(typeWriter, 28);
+      }
+    }
+    typeWriter();
+
+    const hearts = document.getElementById('hearts');
+    const heartSymbols = ['💗', '💕', '💘', '💖', '✨'];
+    for (let h = 0; h < 20; h++) {
+      const el = document.createElement('span');
+      el.className = 'heart';
+      el.textContent = heartSymbols[Math.floor(Math.random() * heartSymbols.length)];
+      el.style.left = Math.random() * 100 + 'vw';
+      el.style.animationDuration = (7 + Math.random() * 7) + 's';
+      el.style.animationDelay = (Math.random() * 7) + 's';
+      el.style.fontSize = (15 + Math.random() * 18) + 'px';
+      hearts.appendChild(el);
+    }
+
+    const chips = document.querySelectorAll('.chip');
+    const selected = new Set();
+    chips.forEach(chip => {
+      chip.addEventListener('click', () => {
+        chip.classList.toggle('selected');
+        if (selected.has(chip.dataset.value)) selected.delete(chip.dataset.value);
+        else selected.add(chip.dataset.value);
+      });
+    });
+
+    const yesBtn = document.getElementById('yesBtn');
+    const noBtn = document.getElementById('noBtn');
+    const result = document.getElementById('result');
+    const finalText = document.getElementById('finalText');
+    const shareBtn = document.getElementById('shareBtn');
+
+    const teasing = [
+      'Σίγουρα; 😇',
+      'Ξανασκέψου το λίγο 💕',
+      'Δεν πατιέται εύκολα αυτό 🙈',
+      'Έλα, πες ναι 🥹',
+      'Το ναι είναι πιο ωραίο 💖'
+    ];
+    let teaseIndex = 0;
+
+    function randomSpotForNoButton() {
+      const padding = 16;
+      const rect = noBtn.getBoundingClientRect();
+      const maxLeft = Math.max(padding, window.innerWidth - rect.width - padding);
+      const maxTop = Math.max(padding, window.innerHeight - rect.height - padding);
+
+      return {
+        left: padding + Math.random() * (maxLeft - padding),
+        top: padding + Math.random() * (maxTop - padding)
+      };
+    }
+
+    function escapeNoButton(event) {
+      event.preventDefault();
+      event.stopPropagation();
+
+      noBtn.textContent = teasing[teaseIndex % teasing.length];
+      teaseIndex++;
+
+      noBtn.classList.add('escaping');
+      yesBtn.style.filter = 'brightness(1.1)';
+
+      setTimeout(() => {
+        noBtn.classList.add('floating');
+        const spot = randomSpotForNoButton();
+        noBtn.style.left = `${spot.left}px`;
+        noBtn.style.top = `${spot.top}px`;
+        noBtn.style.transform = 'scale(1) rotate(0deg)';
+        noBtn.classList.remove('escaping');
+      }, 170);
+
+      setTimeout(() => yesBtn.style.filter = 'none', 520);
+    }
+
+    ['pointerdown', 'mouseenter'].forEach(action => {
+      noBtn.addEventListener(action, escapeNoButton);
+    });
+
+    function buildMessage() {
+      const choices = Array.from(selected);
+      const choiceText = choices.length ? ` Μου άρεσε: ${choices.join(', ')}.` : '';
+      return `Ναι, πάμε ραντεβού αυτό το ΣΚ 💖${choiceText}`;
+    }
+
+    function confetti() {
+      const colors = ['#ff4f87', '#ffd166', '#06d6a0', '#8ecae6', '#f72585', '#ffffff'];
+      for (let c = 0; c < 80; c++) {
+        const piece = document.createElement('span');
+        piece.className = 'confetti';
+        piece.style.left = Math.random() * 100 + 'vw';
+        piece.style.background = colors[Math.floor(Math.random() * colors.length)];
+        piece.style.animationDelay = Math.random() * .35 + 's';
+        piece.style.transform = `rotate(${Math.random() * 180}deg)`;
+        document.body.appendChild(piece);
+        setTimeout(() => piece.remove(), 2300);
+      }
+    }
+
+    function openReadySms(message) {
+      const phone = MY_PHONE_NUMBER.trim().replace(/\s+/g, '');
+
+      if (!phone || phone.includes('ΒΑΛΕ_ΤΟ_ΚΙΝΗΤΟ')) {
+        alert('Πρέπει πρώτα να βάλεις το κινητό σου μέσα στο αρχείο, στη γραμμή MY_PHONE_NUMBER.');
+        return;
+      }
+
+      const body = encodeURIComponent(message);
+      // Για iPhone/Safari: ανοίγει την εφαρμογή Messages με έτοιμο κείμενο.
+      // Δεν γίνεται να σταλεί τελείως αυτόματα χωρίς να πατήσει η ίδια Αποστολή.
+      window.location.href = `sms:${phone}&body=${body}`;
+    }
+
+    yesBtn.addEventListener('click', () => {
+      const msg = buildMessage();
+      finalText.textContent = msg + ' Θα ανοίξει έτοιμο μήνυμα για να το στείλεις στον Λάμπρο 💌';
+      result.classList.add('show');
+      confetti();
+      result.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+
+      // Ανοίγει αυτόματα το iMessage/SMS draft λίγο μετά το πάτημα στο «Ναι».
+      setTimeout(() => openReadySms(msg), 750);
+    });
+
+    shareBtn.addEventListener('click', () => {
+      openReadySms(buildMessage());
+    });
+  </script>
+</body>
+</html>
